@@ -17,37 +17,36 @@ reg-api/
 │   └── schema.prisma          # Database schema
 ├── src/
 │   ├── config/                # Configuration
-│   │   ├── env.ts            # Environment validation
-│   │   └── database.ts       # Prisma client
+│   │   ├── env.js            # Environment validation
+│   │   └── database.js       # Prisma client
 │   ├── middlewares/           # Middlewares
-│   │   ├── auth.middleware.ts
-│   │   ├── error.middleware.ts
-│   │   └── logger.middleware.ts
+│   │   ├── auth.middleware.js
+│   │   ├── error.middleware.js
+│   │   └── logger.middleware.js
 │   ├── exceptions/            # Custom exceptions
 │   ├── utils/                 # Utilities
-│   │   ├── jwt.util.ts
-│   │   ├── password.util.ts
-│   │   └── validator.util.ts
+│   │   ├── jwt.util.js
+│   │   ├── password.util.js
+│   │   └── validator.util.js
 │   ├── health/                # Health check domain
-│   │   ├── health.controller.ts
-│   │   └── health.route.ts
+│   │   ├── health.controller.js
+│   │   └── health.route.js
 │   ├── auth/                  # Authentication domain
-│   │   ├── auth.controller.ts
-│   │   ├── auth.service.ts
-│   │   ├── auth.route.ts
+│   │   ├── auth.controller.js
+│   │   ├── auth.service.js
+│   │   ├── auth.route.js
 │   │   └── dto/
 │   ├── user/                  # User domain
-│   │   ├── user.controller.ts
-│   │   ├── user.service.ts
-│   │   ├── user.repository.ts
-│   │   ├── user.route.ts
+│   │   ├── user.controller.js
+│   │   ├── user.service.js
+│   │   ├── user.repository.js
+│   │   ├── user.route.js
 │   │   └── dto/
-│   ├── types/                 # TypeScript types
-│   ├── app.ts                 # Hono app setup
-│   └── server.ts              # Entry point
+│   ├── app.js                 # Hono app setup
+│   └── server.js              # Entry point
 ├── .env.example
 ├── package.json
-└── tsconfig.json
+└── prisma/
 ```
 
 ## 🚀 การติดตั้ง
@@ -195,9 +194,8 @@ Controller → Service → Repository → Database
 ## 🔧 Scripts
 
 ```bash
-npm run dev              # Run development server
-npm run build            # Build for production
-npm run start            # Start production server
+npm run dev              # Run development server (watch mode)
+npm run start            # Start server
 npm run prisma:generate  # Generate Prisma Client
 npm run prisma:migrate   # Run database migrations
 npm run prisma:studio    # Open Prisma Studio
@@ -274,9 +272,6 @@ docker-compose exec reg-api sh
 
 # Database shell
 docker-compose exec postgres psql -U regapi -d reg_api_db
-
-# Remove all (including volumes)
-docker-compose down -v
 ```
 
 ## 🛡️ Security Features
@@ -288,7 +283,7 @@ docker-compose down -v
 - ✅ CORS configuration
 - ✅ Environment variable validation
 - ✅ Error handling middleware
-- ✅ Type-safe API ด้วย TypeScript
+- ✅ Data validation ด้วย Zod
 
 ## 📦 Technologies
 
@@ -298,7 +293,7 @@ docker-compose down -v
 - **JWT** - Authentication
 - **bcrypt** - Password hashing
 - **Zod** - Schema validation
-- **TypeScript** - Type safety
+- **JavaScript (ESM)** - Runtime language
 
 ## 📄 License
 
