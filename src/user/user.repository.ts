@@ -8,7 +8,7 @@ export class UserRepository {
     });
   }
 
-  async findById(id: string): Promise<User | null> {
+  async findById(id: number): Promise<User | null> {
     return prisma.user.findUnique({
       where: { id },
     });
@@ -24,14 +24,14 @@ export class UserRepository {
     });
   }
 
-  async update(id: string, data: Partial<Omit<User, 'id' | 'createdAt'>>): Promise<User> {
+  async update(id: number, data: Partial<Omit<User, 'id' | 'createdAt'>>): Promise<User> {
     return prisma.user.update({
       where: { id },
       data,
     });
   }
 
-  async delete(id: string): Promise<User> {
+  async delete(id: number): Promise<User> {
     return prisma.user.delete({
       where: { id },
     });

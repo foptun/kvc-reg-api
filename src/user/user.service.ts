@@ -10,7 +10,7 @@ export class UserService {
   }
 
   async getById(id: string) {
-    const user = await this.userRepository.findById(id);
+    const user = await this.userRepository.findById(Number(id));
 
     if (!user) {
       throw new NotFoundException('User not found');
@@ -37,25 +37,25 @@ export class UserService {
   }
 
   async update(id: string, dto: UpdateUserDto) {
-    const existingUser = await this.userRepository.findById(id);
+    const existingUser = await this.userRepository.findById(Number(id));
 
     if (!existingUser) {
       throw new NotFoundException('User not found');
     }
 
-    const updatedUser = await this.userRepository.update(id, dto);
+    const updatedUser = await this.userRepository.update(Number(id), dto);
 
     return this.sanitizeUser(updatedUser);
   }
 
   async delete(id: string) {
-    const existingUser = await this.userRepository.findById(id);
+    const existingUser = await this.userRepository.findById(Number(id));
 
     if (!existingUser) {
       throw new NotFoundException('User not found');
     }
 
-    await this.userRepository.delete(id);
+    await this.userRepository.delete(Number(id));
 
     return { message: 'User deleted successfully' };
   }
