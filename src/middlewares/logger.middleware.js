@@ -1,6 +1,6 @@
 import { Context, Next } from 'hono';
 
-export async function logger(c: Context, next: Next) {
+export async function logger(c, next) {
   const start = Date.now();
   const { method, path } = c.req;
 
