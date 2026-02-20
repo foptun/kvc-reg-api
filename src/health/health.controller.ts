@@ -1,6 +1,7 @@
 import { Context } from 'hono';
 import { prisma } from '../config/database.js';
 import { ResponseUtil } from '../utils/response.util.js';
+import { DateUtil } from '../utils/date.util';
 
 export class HealthController {
   async check(c: Context) {
@@ -12,10 +13,9 @@ export class HealthController {
         ResponseUtil.success(
           {
             status: 'UP',
-            timestamp: new Date().toISOString(),
-            localTimestamp: new Date().toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }),
             uptime: process.uptime(),
             database: 'connected',
+            timestamp: DateUtil.getThaiTimestamp(),
           },
           'Health check passed'
         )
@@ -24,11 +24,10 @@ export class HealthController {
       return c.json(
         ResponseUtil.fail('Health check failed', 5003, {
           status: 'unhealthy',
-          timestamp: new Date().toISOString(),
-          localTimestamp: new Date().toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }),
           uptime: process.uptime(),
           database: 'disconnected',
           error: (error as Error).message,
+          timestamp: DateUtil.getThaiTimestamp(),
         }),
         503
       );
@@ -38,10 +37,7 @@ export class HealthController {
   async ping(c: Context) {
     return c.json(
       ResponseUtil.success(
-        {
-          timestamp: new Date().toISOString(),
-          localTimestamp: new Date().toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }),
-        },
+        null,
         'pong'
       )
     );

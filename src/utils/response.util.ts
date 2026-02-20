@@ -1,7 +1,10 @@
+import { DateUtil } from './date.util.js';
+
 export interface ApiResponse<T = any> {
   status: 'SUCCESS' | 'FAIL';
   code: number;
   message: string;
+  timestamp: string;
   data: T | null;
 }
 
