@@ -1,0 +1,109 @@
+import { User } from '@prisma/client';
+import { UserRepository } from '../user/user.repository.js';
+import { PasswordUtil } from '../utils/password.util.js';
+import { JwtUtil } from '../utils/jwt.util.js';
+import { UnauthorizedException } from '../exceptions/unauthorized.exception.js';
+import { ConflictException } from '../exceptions/conflict.exception.js';
+import { ValidationException } from '../exceptions/validation.exception.js';
+import { LoginDto } from './dto/login.dto.js';
+import { RegisterDto } from './dto/register.dto.js';
+
+export class AuthService {
+  private userRepository: UserRepository;
+
+  constructor() {
+    this.userRepository = new UserRepository();
+  }
+
+  async login(dto: LoginDto) {
+    const user = await this.userRepository.findByEmail(dto.email);
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    if (!user.isActive) {
+      throw new UnauthorizedException('Account is deactivated');
+    }
+
+    const isPasswordValid = await PasswordUtil.compare(dto.password, user.password);
+
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    const tokens = this.generateTokens(user);
+
+    return {
+      user: this.sanitizeUser(user),
+      ...tokens,
+    };
+  }
+
+  async register(dto: RegisterDto) {
+    const existingUser = await this.userRepository.findByEmail(dto.email);
+
+    if (existingUser) {
+      throw new ConflictException('Email already registered');
+    }
+
+    const passwordValidation = PasswordUtil.validate(dto.password);
+    if (!passwordValidation.valid) {
+      throw new ValidationException('Password validation failed', passwordValidation.errors);
+    }
+
+    const hashedPassword = await PasswordUtil.hash(dto.password);
+
+    const user = await this.userRepository.create({
+      email: dto.email,
+      password: hashedPassword,
+      name: dto.name,
+    });
+
+    const tokens = this.generateTokens(user);
+
+    return {
+      user: this.sanitizeUser(user),
+      ...tokens,
+    };
+  }
+
+  async refreshToken(refreshToken: string) {
+    try {
+      const payload = JwtUtil.verifyRefreshToken(refreshToken);
+
+      const user = await this.userRepository.findById(payload.userId);
+
+      if (!user || !user.isActive) {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
+
+      const tokens = this.generateTokens(user);
+
+      return {
+        user: this.sanitizeUser(user),
+        ...tokens,
+      };
+    } catch (error) {
+      throw new UnauthorizedException((error as Error).message);
+    }
+  }
+
+  private generateTokens(user: User) {
+    const payload = {
+      userId: user.id,
+      email: user.email,
+      role: user.role,
+    };
+
+    return {
+      accessToken: JwtUtil.generateAccessToken(payload),
+      refreshToken: JwtUtil.generateRefreshToken(payload),
+    };
+  }
+
+  private sanitizeUser(user: User) {
+    const { password, ...sanitized } = user;
+    return sanitized;
+  }
+}

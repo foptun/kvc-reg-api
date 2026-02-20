@@ -1,0 +1,126 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.npm
+.yarn
+
+# Environment variables
+.env
+.env.*
+!.env.example
+!.env.docker
+
+# Build output
+dist/
+build/
+out/
+*.tsbuildinfo
+.next/
+.nuxt/
+.output/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-debug.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+lib-cov
+
+# Testing
+coverage/
+*.lcov
+.nyc_output
+.jest/
+*.spec.ts.snap
+
+# Editor directories and files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.AppleDouble
+.LSOverride
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.fleet/
+.history/
+
+# Prisma
+prisma/migrations/
+!prisma/migrations/.gitkeep
+*.db
+*.db-journal
+
+# Database
+*.sqlite
+*.sqlite3
+
+# Docker
+.docker/
+docker-compose.override.yml
+*.dockerignore.local
+
+# OS
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+.cache/
+.temp/
+tmp/
+
+# Optional
+.eslintcache
+.stylelintcache
+.parcel-cache
+.turbo
+*.tgz
+*.gz
+
+# Backup files
+*.backup
+*.old
+*~.nib
+
+# Security
+.env.production
+.env.staging
+secrets.yml
+*.pem
+*.key
+*.cert
+*.crt
+!.gitkeep

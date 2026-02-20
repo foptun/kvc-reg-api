@@ -1,0 +1,41 @@
+# Dependencies
+node_modules
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build output
+dist
+build
+out
+.next
+.nuxt
+
+# Environment
+.env
+.env.*
+
+# Generated files
+*.min.js
+*.min.css
+
+# Coverage
+coverage
+
+# Prisma
+prisma/migrations
+
+# Logs
+*.log
+
+# Cache
+.cache
+.turbo
+.eslintcache
+
+# OS
+.DS_Store
+
+# Docker
+Dockerfile
+docker-compose*.yml
