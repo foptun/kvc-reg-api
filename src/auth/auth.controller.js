@@ -1,0 +1,67 @@
+import { AuthService } from './auth.service.js';
+import { loginSchema } from './dto/login.dto.js';
+import { registerSchema } from './dto/register.dto.js';
+import { ValidationException } from '../exceptions/validation.exception.js';
+import { z } from 'zod';
+import { ResponseUtil } from '../utils/response.util.js';
+
+export class AuthController {
+  constructor() {
+    this.authService = new AuthService();
+  }
+
+  async login(c) {
+    try {
+      const body = await c.req.json();
+      const dto = loginSchema.parse(body);
+
+      const result = await this.authService.login(dto);
+
+      return c.json(ResponseUtil.success(result, 'Login successful'));
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        throw new ValidationException('Validation failed', error.errors);
+      }
+      throw error;
+    }
+  }
+
+  async register(c) {
+    try {
+      const body = await c.req.json();
+      const dto = registerSchema.parse(body);
+
+      const result = await this.authService.register(dto);
+
+      return c.json(ResponseUtil.success(result, 'Registration successful'), 201);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        throw new ValidationException('Validation failed', error.errors);
+      }
+      throw error;
+    }
+  }
+
+  async refreshToken(c) {
+    try {
+      const body = await c.req.json();
+      const refreshToken = body.refreshToken;
+
+      if (!refreshToken) {
+        throw new ValidationException('Refresh token is required');
+      }
+
+      const result = await this.authService.refreshToken(refreshToken);
+
+      return c.json(ResponseUtil.success(result, 'Token refreshed successfully'));
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async me(c) {
+    const user = c.get('user');
+
+    return c.json(ResponseUtil.success({ user }, 'User retrieved successfully'));
+  }
+}
