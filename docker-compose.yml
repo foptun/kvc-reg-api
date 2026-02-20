@@ -18,6 +18,7 @@ services:
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
       JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN:-30d}
       BCRYPT_ROUNDS: ${BCRYPT_ROUNDS:-10}
+      TZ: ${TZ:-Asia/Bangkok}
     env_file:
       - .env
     networks:

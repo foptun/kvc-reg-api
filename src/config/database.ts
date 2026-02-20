@@ -7,7 +7,10 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-const pool = new pg.Pool({ connectionString: env.DATABASE_URL });
+const pool = new pg.Pool({
+  connectionString: env.DATABASE_URL,
+  options: '-c timezone=Asia/Bangkok'
+});
 const adapter = new PrismaPg(pool);
 
 export const prisma =

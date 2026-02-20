@@ -11,8 +11,9 @@ export class HealthController {
       return c.json(
         ResponseUtil.success(
           {
-            status: 'healthy',
+            status: 'UP',
             timestamp: new Date().toISOString(),
+            localTimestamp: new Date().toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }),
             uptime: process.uptime(),
             database: 'connected',
           },
@@ -24,6 +25,7 @@ export class HealthController {
         ResponseUtil.fail('Health check failed', 5003, {
           status: 'unhealthy',
           timestamp: new Date().toISOString(),
+          localTimestamp: new Date().toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }),
           uptime: process.uptime(),
           database: 'disconnected',
           error: (error as Error).message,
@@ -38,6 +40,7 @@ export class HealthController {
       ResponseUtil.success(
         {
           timestamp: new Date().toISOString(),
+          localTimestamp: new Date().toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }),
         },
         'pong'
       )

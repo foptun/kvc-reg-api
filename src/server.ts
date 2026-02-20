@@ -3,6 +3,9 @@ import app from './app.js';
 import { env } from './config/env.js';
 import { prisma } from './config/database.js';
 
+// Set default timezone
+process.env.TZ = env.TZ;
+
 async function startServer() {
   try {
     // Test database connection
