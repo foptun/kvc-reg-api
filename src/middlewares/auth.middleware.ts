@@ -1,6 +1,7 @@
 import { Context, Next } from 'hono';
 import { JwtUtil } from '../utils/jwt.util.js';
 import { UnauthorizedException } from '../exceptions/unauthorized.exception.js';
+import { ForbiddenException } from '../exceptions/forbidden.exception.js';
 
 export async function authMiddleware(c: Context, next: Next) {
   try {
@@ -40,7 +41,7 @@ export function requireRole(...roles: string[]) {
     }
 
     if (!roles.includes(user.role)) {
-      throw new UnauthorizedException(`Requires one of these roles: ${roles.join(', ')}`);
+      throw new ForbiddenException(`Requires one of these roles: ${roles.join(', ')}`);
     }
 
     await next();

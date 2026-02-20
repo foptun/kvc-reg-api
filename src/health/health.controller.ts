@@ -1,5 +1,6 @@
 import { Context } from 'hono';
 import { prisma } from '../config/database.js';
+import { ResponseUtil } from '../utils/response.util.js';
 
 export class HealthController {
   async check(c: Context) {
@@ -7,33 +8,39 @@ export class HealthController {
       // Check database connection
       await prisma.$queryRaw`SELECT 1`;
 
-      return c.json({
-        success: true,
-        status: 'healthy',
-        timestamp: new Date().toISOString(),
-        uptime: process.uptime(),
-        database: 'connected',
-      });
+      return c.json(
+        ResponseUtil.success(
+          {
+            status: 'healthy',
+            timestamp: new Date().toISOString(),
+            uptime: process.uptime(),
+            database: 'connected',
+          },
+          'Health check passed'
+        )
+      );
     } catch (error) {
       return c.json(
-        {
-          success: false,
+        ResponseUtil.fail('Health check failed', 5003, {
           status: 'unhealthy',
           timestamp: new Date().toISOString(),
           uptime: process.uptime(),
           database: 'disconnected',
           error: (error as Error).message,
-        },
+        }),
         503
       );
     }
   }
 
   async ping(c: Context) {
-    return c.json({
-      success: true,
-      message: 'pong',
-      timestamp: new Date().toISOString(),
-    });
+    return c.json(
+      ResponseUtil.success(
+        {
+          timestamp: new Date().toISOString(),
+        },
+        'pong'
+      )
+    );
   }
 }

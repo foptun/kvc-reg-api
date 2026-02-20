@@ -6,6 +6,7 @@ import { userRoutes } from './user/user.route.js';
 import { logger } from './middlewares/logger.middleware.js';
 import { errorHandler } from './middlewares/error.middleware.js';
 import { env } from './config/env.js';
+import { ResponseUtil } from './utils/response.util.js';
 
 const app = new Hono();
 
@@ -25,15 +26,18 @@ app.use(
 
 // Root endpoint
 app.get('/', (c) => {
-  return c.json({
-    success: true,
-    message: 'Registration API',
-    version: '1.0.0',
-    endpoints: {
-      health: '/health',
-      api: '/api/v1',
-    },
-  });
+  return c.json(
+    ResponseUtil.success(
+      {
+        version: '1.0.0',
+        endpoints: {
+          health: '/health',
+          api: '/api/v1',
+        },
+      },
+      'Registration API'
+    )
+  );
 });
 
 // Health check (not versioned)
@@ -49,12 +53,9 @@ app.route('/api/v1', apiV1);
 // 404 handler
 app.notFound((c) => {
   return c.json(
-    {
-      success: false,
-      error: 'NotFound',
-      message: 'The requested resource was not found',
+    ResponseUtil.fail('The requested resource was not found', 404, {
       path: c.req.path,
-    },
+    }),
     404
   );
 });

@@ -4,6 +4,7 @@ import { loginSchema } from './dto/login.dto.js';
 import { registerSchema } from './dto/register.dto.js';
 import { ValidationException } from '../exceptions/validation.exception.js';
 import { z } from 'zod';
+import { ResponseUtil } from '../utils/response.util.js';
 
 export class AuthController {
   private authService: AuthService;
@@ -19,11 +20,7 @@ export class AuthController {
 
       const result = await this.authService.login(dto);
 
-      return c.json({
-        success: true,
-        data: result,
-        message: 'Login successful',
-      });
+      return c.json(ResponseUtil.success(result, 'Login successful'));
     } catch (error) {
       if (error instanceof z.ZodError) {
         throw new ValidationException('Validation failed', error.errors);
@@ -39,14 +36,7 @@ export class AuthController {
 
       const result = await this.authService.register(dto);
 
-      return c.json(
-        {
-          success: true,
-          data: result,
-          message: 'Registration successful',
-        },
-        201
-      );
+      return c.json(ResponseUtil.success(result, 'Registration successful'), 201);
     } catch (error) {
       if (error instanceof z.ZodError) {
         throw new ValidationException('Validation failed', error.errors);
@@ -66,11 +56,7 @@ export class AuthController {
 
       const result = await this.authService.refreshToken(refreshToken);
 
-      return c.json({
-        success: true,
-        data: result,
-        message: 'Token refreshed successfully',
-      });
+      return c.json(ResponseUtil.success(result, 'Token refreshed successfully'));
     } catch (error) {
       throw error;
     }
@@ -79,10 +65,6 @@ export class AuthController {
   async me(c: Context) {
     const user = c.get('user');
 
-    return c.json({
-      success: true,
-      data: { user },
-      message: 'User retrieved successfully',
-    });
+    return c.json(ResponseUtil.success({ user }, 'User retrieved successfully'));
   }
 }

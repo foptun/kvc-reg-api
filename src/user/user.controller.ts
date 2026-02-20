@@ -3,6 +3,7 @@ import { UserService } from './user.service.js';
 import { updateUserSchema } from './dto/user.dto.js';
 import { ValidationException } from '../exceptions/validation.exception.js';
 import { z } from 'zod';
+import { ResponseUtil } from '../utils/response.util.js';
 
 export class UserController {
   private userService: UserService;
@@ -15,11 +16,7 @@ export class UserController {
     const id = c.req.param('id');
     const user = await this.userService.getById(id);
 
-    return c.json({
-      success: true,
-      data: { user },
-      message: 'User retrieved successfully',
-    });
+    return c.json(ResponseUtil.success({ user }, 'User retrieved successfully'));
   }
 
   async getAll(c: Context) {
@@ -28,11 +25,7 @@ export class UserController {
 
     const users = await this.userService.getAll(page, limit);
 
-    return c.json({
-      success: true,
-      data: { users, page, limit },
-      message: 'Users retrieved successfully',
-    });
+    return c.json(ResponseUtil.success({ users, page, limit }, 'Users retrieved successfully'));
   }
 
   async update(c: Context) {
@@ -43,11 +36,7 @@ export class UserController {
 
       const user = await this.userService.update(id, dto);
 
-      return c.json({
-        success: true,
-        data: { user },
-        message: 'User updated successfully',
-      });
+      return c.json(ResponseUtil.success({ user }, 'User updated successfully'));
     } catch (error) {
       if (error instanceof z.ZodError) {
         throw new ValidationException('Validation failed', error.errors);
@@ -60,21 +49,13 @@ export class UserController {
     const id = c.req.param('id');
     const result = await this.userService.delete(id);
 
-    return c.json({
-      success: true,
-      data: result,
-      message: 'User deleted successfully',
-    });
+    return c.json(ResponseUtil.success(result, 'User deleted successfully'));
   }
 
   async getProfile(c: Context) {
     const currentUser = c.get('user');
     const user = await this.userService.getById(currentUser.userId);
 
-    return c.json({
-      success: true,
-      data: { user },
-      message: 'Profile retrieved successfully',
-    });
+    return c.json(ResponseUtil.success({ user }, 'Profile retrieved successfully'));
   }
 }
