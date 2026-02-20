@@ -10,7 +10,7 @@ export interface JwtPayload {
 export class JwtUtil {
   static generateAccessToken(payload: JwtPayload): string {
     return jwt.sign(payload, env.JWT_SECRET, {
-      expiresIn: env.JWT_EXPIRES_IN,
+      expiresIn: env.JWT_EXPIRES_IN as jwt.SignOptions['expiresIn'],
       issuer: 'reg-api',
       audience: 'reg-api-client',
     });
@@ -18,7 +18,7 @@ export class JwtUtil {
 
   static generateRefreshToken(payload: JwtPayload): string {
     return jwt.sign(payload, env.JWT_REFRESH_SECRET, {
-      expiresIn: env.JWT_REFRESH_EXPIRES_IN,
+      expiresIn: env.JWT_REFRESH_EXPIRES_IN as jwt.SignOptions['expiresIn'],
       issuer: 'reg-api',
       audience: 'reg-api-client',
     });

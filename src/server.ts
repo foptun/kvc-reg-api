@@ -10,12 +10,12 @@ async function startServer() {
     console.log('✅ Database connected successfully');
 
     // Start server
-    const server = serve(
+    serve(
       {
         fetch: app.fetch,
         port: env.PORT,
       },
-      (info) => {
+      () => {
         console.log(`
 ╔════════════════════════════════════════╗
 ║     Registration API Server            ║
